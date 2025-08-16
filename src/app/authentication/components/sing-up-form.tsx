@@ -25,18 +25,22 @@ import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import z from "zod";
 
-const formSchema = z.object({
-  name: z.string().trim().min(1, "Nome é obrigtório."),
-  email: z.email("E-mail inválido."),
-  password: z.string().min(8, "Senha inválida."),
-  confirmPassword: z.string().min(8, "Senha inválida."),
-}).refine((data) => {
-  return data.password === data.confirmPassword;
-
-}, {
-  error: "As senha não coincidem.",
-  path: ["confirmPassord"]
-});
+const formSchema = z
+  .object({
+    name: z.string().trim().min(1, "Nome é obrigtório."),
+    email: z.email("E-mail inválido."),
+    password: z.string().min(8, "Senha inválida."),
+    confirmPassword: z.string().min(8, "Senha inválida."),
+  })
+  .refine(
+    (data) => {
+      return data.password === data.confirmPassword;
+    },
+    {
+      error: "As senha não coincidem.",
+      path: ["confirmPassord"],
+    }
+  );
 
 type FormValues = z.infer<typeof formSchema>;
 
@@ -65,22 +69,20 @@ const SingUpForm = () => {
           if (error.error.code === "USER_ALREDY_EXIST")
             toast.error("E-mail já cadastrado.");
           form.setError("email", {
-            message: "Email já cadastrado"
-          })
+            message: "Email já cadastrado",
+          });
           toast.error(error.error.message);
-        }
+        },
       },
     });
   }
 
   return (
     <>
-      <Card>
+      <Card className="w-full">
         <CardHeader>
           <CardTitle>Entrar</CardTitle>
-          <CardDescription>
-            Faça login para continuar.
-          </CardDescription>
+          <CardDescription>Faça login para continuar.</CardDescription>
         </CardHeader>
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
@@ -118,7 +120,11 @@ const SingUpForm = () => {
                   <FormItem>
                     <FormLabel>Senha</FormLabel>
                     <FormControl>
-                      <Input placeholder="Digite sua senha" type="password"{...field} />
+                      <Input
+                        placeholder="Digite sua senha"
+                        type="password"
+                        {...field}
+                      />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -131,7 +137,11 @@ const SingUpForm = () => {
                   <FormItem>
                     <FormLabel>Senha</FormLabel>
                     <FormControl>
-                      <Input placeholder="Digite sua senha novamente" type="password"{...field} />
+                      <Input
+                        placeholder="Digite sua senha novamente"
+                        type="password"
+                        {...field}
+                      />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
